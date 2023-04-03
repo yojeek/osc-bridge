@@ -16,13 +16,26 @@ osc.on('*', message => {
 });
 */
 
+const sentValuesMap = new Map();
+const THRESHOLD = 0.05;
+
+const sendFloatWithThreshold = (address, value) => {
+    if (sentValuesMap.has(address) && Math.abs(sentValuesMap.get(address) - value) < THRESHOLD) {
+        console.log(`skip ${address} by threshold ${Math.abs(sentValuesMap.get(address) - value)}`)
+        return;
+    }
+    const msg = new OSC.Message(address, value)
+    const binary = msg.pack()
+    socket.send(new Buffer(binary), 0, binary.byteLength, 1234, 'localhost')
+    console.log(`sent ${address}`, value)
+    sentValuesMap.set(address, value)
+}
+
 osc.on('*', message => {
-    console.log(message.args)
+    //console.log(message.args)
     const [_unused, idx, x, y, name] = message.args
-    let binary = (new OSC.Message(message.address + '_' + name + '_x', x)).pack()
-    socket.send(new Buffer(binary), 0, binary.byteLength, 1234, 'localhost')
-    binary = (new OSC.Message(message.address + '_' + name + '_y', y)).pack()
-    socket.send(new Buffer(binary), 0, binary.byteLength, 1234, 'localhost')
+    sendFloatWithThreshold(message.address + '_' + name + '_x', x)
+    sendFloatWithThreshold(message.address + '_' + name + '_y', y)
 });
 
 

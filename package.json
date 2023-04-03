@@ -1,0 +1,7 @@
+{
+  "name": "osc-reciever-example",
+  "version": "1.0.0",
+  "dependencies": {
+    "osc-js": "^2.4.0"
+  }
+}

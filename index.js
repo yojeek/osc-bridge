@@ -17,7 +17,7 @@ osc.on('*', message => {
 */
 
 const sentValuesMap = new Map();
-const THRESHOLD = 0.05;
+const THRESHOLD = 0.001;
 
 const sendFloatWithThreshold = (address, value) => {
     if (sentValuesMap.has(address) && Math.abs(sentValuesMap.get(address) - value) < THRESHOLD) {

@@ -33,9 +33,9 @@ const sendFloatWithThreshold = (address, value) => {
 
 osc.on('*', message => {
     //console.log(message.args)
-    const [_unused, idx, x, y, name] = message.args
-    sendFloatWithThreshold(message.address + '_' + name + '_x', x)
-    sendFloatWithThreshold(message.address + '_' + name + '_y', y)
+    const [poseIdx, bodyPartIdx, x, y, name] = message.args
+    sendFloatWithThreshold(`${message.address}/${poseIdx}/${name}/x`, x)
+    sendFloatWithThreshold(`${message.address}/${poseIdx}/${name}/y`, y)
 });
 
 
